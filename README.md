@@ -31,6 +31,7 @@ sftp:
   host: file.intranet
   public_host: https://file.internet
   password: <%= ENV['PASSWORD'] %> # optional
+  port: <%= ENV['PORT'] %> #optional - default 22
 ```
 
 File server serves blobs using DiskService:

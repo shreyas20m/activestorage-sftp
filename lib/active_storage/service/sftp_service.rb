@@ -11,7 +11,7 @@ module ActiveStorage
 
     attr_reader :host, :user, :root, :public_host, :public_root
 
-    def initialize(host:, user:, public_host: nil, root: './', public_root: './', password: nil, simple_public_urls: false, verify_via_http_get: false)
+    def initialize(host:, user:, public_host: nil, root: './', public_root: './', password: nil, simple_public_urls: false, verify_via_http_get: false, port: 22)
       @host = host
       @user = user
       @root = root
@@ -20,6 +20,7 @@ module ActiveStorage
       @password = password
       @simple_public_urls = simple_public_urls
       @verify_via_http_get = verify_via_http_get
+      @port = port
     end
 
     def upload(key, io, checksum: nil, **)
@@ -234,6 +235,7 @@ module ActiveStorage
     protected
       def through_sftp(&block)
         opts = @password.present? ? {password: @password} : {}
+        opts[:port] = @port
         Net::SFTP.start(@host, @user, opts.merge(non_interactive: true)) do |sftp|
           block.call(sftp)
         end
